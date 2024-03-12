@@ -38,9 +38,9 @@ jobs:
           tags: |
             type=semver,pattern={{ version }}
             # dynamically set the branch name as a prefix
-            type=sha,prefix=${BRANCH_NAME}-
+            type=sha,prefix=${{ env.BRANCH_NAME }}-
             # dynamically set the branch name
-            type=raw,value=${BRANCH_NAME}-latest
+            type=raw,value=${{ env.BRANCH_NAME }}-latest
             # set the latest branch name
             type=raw,value=latest
 
