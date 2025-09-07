@@ -36,7 +36,7 @@ jobs:
         env:
           BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
         with:
-          images: ghcr.io/${{ github.repository }}/dnscrypt-server
+          images: ghcr.io/${{ github.repository }}
           tags: |
             type=semver,pattern={{ version }}
             # dynamically set the branch name as a prefix
