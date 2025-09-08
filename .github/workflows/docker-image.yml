@@ -24,10 +24,12 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Restore Docker build cache
+        # Use a stable key based on the branch/ref and Dockerfile contents so
+        # the cache is reused across retries and only invalidated when Dockerfile changes
         uses: actions/cache@v3
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          key: ${{ runner.os }}-buildx-${{ github.ref }}-${{ hashFiles('**/Dockerfile') }}
           restore-keys: |
             ${{ runner.os }}-buildx-
 
@@ -62,5 +64,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
+          # Use GitHub Actions cache backend for buildx so the cache is persisted
+          # across workflow runs and job restarts (type=gha)
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
